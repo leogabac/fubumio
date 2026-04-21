@@ -6,6 +6,7 @@ decision before clicking export. Shocking concept, I know.
 `fubumio` is a small, opinionated pile of colors, rcParams, and axes helpers.
 The name is doing exactly what it says: adding a bit of weeb personality to
 every side-project I have because apparently I simply cannot contain myself.
+
 The palette starts with Fubuki cyan and Mio red, then leaves room for whatever
 other colors eventually wander in and demand tenure. The goal is still the same:
 give figures a visual identity instead of the default matplotlib emotional
@@ -15,6 +16,7 @@ support blue.
 
 - `colors` for named color tokens.
 - `palettes` for ordered color recipes and matplotlib property cycles.
+- `options` for common matplotlib keyword presets.
 - `apply_style()` when you want global plotting defaults.
 - `rc_context()` when you want the style temporarily, like a responsible adult.
 - `clean_axes()`, `percent_axis()`, and `label_panel()` for the boring cleanup
@@ -40,11 +42,23 @@ pip install -e ".[dev]"
 ```python
 import matplotlib.pyplot as plt
 import fubumio as fm
+from fubumio import colors as c
+from fubumio import options as o
 
 with fm.rc_context():
     fig, ax = plt.subplots()
-    ax.plot([1, 2, 3], [0.2, 0.6, 0.9], label="Fubuki-coded competence")
-    ax.plot([1, 2, 3], [0.1, 0.4, 0.7], label="Mio-coded consequences")
+    ax.plot(
+        [1, 2, 3],
+        [0.2, 0.6, 0.9],
+        label="Fubuki-coded competence",
+        **o.line(c.fubuki.base),
+    )
+    ax.plot(
+        [1, 2, 3],
+        [0.1, 0.4, 0.7],
+        label="Mio-coded consequences",
+        **o.markers(c.mio.base, markersize=5),
+    )
 
     fm.percent_axis(ax)
     fm.clean_axes(ax)
@@ -98,6 +112,22 @@ Available palettes:
 - `ina_contrast`: Ina purple/gold for comparing two variables.
 - `ina_dark_contrast`: darker Ina purple/gold when the plot needs more drama.
 - `suisei`: the two Suisei blues.
+
+## Plot Options
+
+```python
+from fubumio import colors as c
+from fubumio import options as o
+
+ax.plot(x, y, **o.line(c.ina.gold))
+ax.plot(x, y, **o.markers(c.ina.purple, markersize=3))
+ax.scatter(x, y, **o.scatter(c.suisei.blue, s=12, alpha=0.8))
+ax.errorbar(x, y, yerr, **o.errorbar(c.mio.base, capsize=4))
+```
+
+These are just dictionaries of Matplotlib kwargs with delusions of usefulness.
+Every preset accepts overrides, so the escape hatch is the same as regular
+Matplotlib: pass the keyword you actually want and move on with your life.
 
 ## API
 

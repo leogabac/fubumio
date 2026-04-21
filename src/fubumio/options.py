@@ -1,0 +1,80 @@
+"""Reusable matplotlib keyword option presets."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from . import colors as c
+from .palette import Color
+
+ColorLike = str | Color
+
+
+def _with_overrides(
+    defaults: dict[str, Any],
+    overrides: dict[str, Any],
+) -> dict[str, Any]:
+    opts = defaults.copy()
+    opts.update(overrides)
+    return opts
+
+
+def line(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for line plots."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "linewidth": 2.0,
+            "solid_capstyle": "round",
+        },
+        overrides,
+    )
+
+
+def markers(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for marker-only line plots."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "linestyle": "none",
+            "marker": "o",
+            "markersize": 4.5,
+        },
+        overrides,
+    )
+
+
+def scatter(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for scatter plots."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "s": 24,
+            "edgecolors": "none",
+            "alpha": 0.95,
+        },
+        overrides,
+    )
+
+
+def errorbar(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for errorbar plots."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "elinewidth": 1.0,
+            "capsize": 2.5,
+            "capthick": 1.0,
+            "linestyle": "none",
+            "marker": "o",
+            "markersize": 4.0,
+        },
+        overrides,
+    )
+
+
+__all__ = ["ColorLike", "errorbar", "line", "markers", "scatter"]

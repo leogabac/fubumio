@@ -7,6 +7,7 @@ from matplotlib.colors import is_color_like
 
 import fubumio as fm
 from fubumio import colors as c
+from fubumio import options as o
 from fubumio import palettes as p
 
 
@@ -43,6 +44,23 @@ def test_new_palettes_include_imported_colors():
     assert fm.palette("suisei") == p.suisei
 
 
+def test_plot_options_expose_overridable_matplotlib_kwargs():
+    assert o.line(c.ina.gold) == {
+        "color": c.ina.gold,
+        "linewidth": 2.0,
+        "solid_capstyle": "round",
+    }
+    assert o.line(c.ina.gold, linewidth=1.2, alpha=0.8) == {
+        "color": c.ina.gold,
+        "linewidth": 1.2,
+        "solid_capstyle": "round",
+        "alpha": 0.8,
+    }
+    assert o.markers(c.ina.purple, markersize=3)["markersize"] == 3
+    assert o.scatter(c.suisei.blue, s=12)["s"] == 12
+    assert o.errorbar(c.mio.base, capsize=4)["capsize"] == 4
+
+
 def test_rc_context_applies_and_restores_style():
     before = plt.rcParams["axes.facecolor"]
     with fm.rc_context():
@@ -63,7 +81,10 @@ def test_rc_context_applies_and_restores_style():
 def test_axes_helpers_return_axes():
     fig, ax = plt.subplots()
     try:
-        ax.plot([0, 1], [0.2, 0.8], label="line")
+        ax.plot([0, 1], [0.2, 0.8], label="line", **o.line(c.ina.gold))
+        ax.plot([0, 1], [0.1, 0.7], **o.markers(c.ina.purple))
+        ax.scatter([0.5], [0.4], **o.scatter(c.suisei.blue))
+        ax.errorbar([0.7], [0.5], [0.1], **o.errorbar(c.mio.base))
         ax.legend()
         assert fm.clean_axes(ax) is ax
         assert fm.percent_axis(ax) is ax
