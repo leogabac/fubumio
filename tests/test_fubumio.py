@@ -7,6 +7,7 @@ from matplotlib.colors import is_color_like
 
 import fubumio as fm
 from fubumio import colors as c
+from fubumio import export
 from fubumio import layouts as layout
 from fubumio import options as o
 from fubumio import palettes as p
@@ -60,6 +61,43 @@ def test_plot_options_expose_overridable_matplotlib_kwargs():
     assert o.markers(c.ina.purple, markersize=3)["markersize"] == 3
     assert o.scatter(c.suisei.blue, s=12)["s"] == 12
     assert o.errorbar(c.mio.base, capsize=4)["capsize"] == 4
+    assert o.savefig() == {"bbox_inches": "tight", "dpi": 300}
+    assert o.savefig(dpi=180, transparent=True) == {
+        "bbox_inches": "tight",
+        "dpi": 180,
+        "transparent": True,
+    }
+
+
+def test_export_savefig_writes_png_and_pdf(tmp_path):
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0, 1], [0, 1])
+        saved = export.savefig(fig, tmp_path / "plot.png")
+    finally:
+        plt.close(fig)
+
+    assert saved == (tmp_path / "plot.png", tmp_path / "plot.pdf")
+    assert (tmp_path / "plot.png").is_file()
+    assert (tmp_path / "plot.pdf").is_file()
+
+
+def test_export_savefig_accepts_formats_and_overrides(tmp_path):
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0, 1], [0, 1])
+        saved = export.savefig(
+            fig,
+            tmp_path / "nested" / "plot",
+            formats=("png",),
+            dpi=180,
+            transparent=True,
+        )
+    finally:
+        plt.close(fig)
+
+    assert saved == (tmp_path / "nested" / "plot.png",)
+    assert saved[0].is_file()
 
 
 def test_layout_size_uses_prl_widths_by_default():

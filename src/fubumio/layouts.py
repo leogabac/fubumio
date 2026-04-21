@@ -52,7 +52,7 @@ def size(
 def subplots(
     *args: Any,
     width: Column | float = "single",
-    aspect: float = 0.62,
+    aspect: float = 0.45,
     unit: Unit = "pt",
     journal: Journal = "prl",
     **kwargs: Any,

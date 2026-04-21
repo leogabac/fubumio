@@ -44,6 +44,7 @@ pip install -e ".[dev]"
 import matplotlib.pyplot as plt
 import fubumio as fm
 from fubumio import colors as c
+from fubumio import export
 from fubumio import layouts as layout
 from fubumio import options as o
 
@@ -67,7 +68,7 @@ with fm.rc_context():
     ax.set(title="A plot with standards", xlabel="episode", ylabel="vibes")
     ax.legend()
 
-    fig.savefig("plot.png")
+    export.savefig(fig, "plot")
 ```
 
 ## Color Tokens
@@ -125,11 +126,28 @@ ax.plot(x, y, **o.line(c.ina.gold))
 ax.plot(x, y, **o.markers(c.ina.purple, markersize=3))
 ax.scatter(x, y, **o.scatter(c.suisei.blue, s=12, alpha=0.8))
 ax.errorbar(x, y, yerr, **o.errorbar(c.mio.base, capsize=4))
+fig.savefig("plot.png", **o.savefig())
 ```
 
 These are just dictionaries of Matplotlib kwargs with delusions of usefulness.
 Every preset accepts overrides, so the escape hatch is the same as regular
 Matplotlib: pass the keyword you actually want and move on with your life.
+
+For the usual `bbox_inches="tight", dpi=300` ritual:
+
+```python
+fig.savefig("plot.png", **o.savefig())
+fig.savefig("draft.png", **o.savefig(dpi=180, transparent=True))
+```
+
+If you want both PNG and PDF like a sane person:
+
+```python
+from fubumio import export
+
+export.savefig(fig, "plot")       # plot.png and plot.pdf
+export.savefig(fig, "plot.png")   # also plot.png and plot.pdf
+```
 
 ## Layouts
 

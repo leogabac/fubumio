@@ -91,4 +91,24 @@ def errorbar(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, An
     )
 
 
-__all__ = ["ColorLike", "errorbar", "line", "markers", "scatter"]
+def savefig(**overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for saving figures."""
+
+    return _with_overrides(
+        {
+            "bbox_inches": "tight",
+            "dpi": 300,
+        },
+        overrides,
+    )
+
+
+__all__ = [
+    "ColorLike",
+    "errorbar",
+    "line",
+    "markerline",
+    "markers",
+    "savefig",
+    "scatter",
+]
