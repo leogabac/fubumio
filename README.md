@@ -121,12 +121,19 @@ Applies the style only inside the block, with optional rcParam overrides.
 
 ```python
 fm.clean_axes(ax)
+fm.drop_axis_labels(ax)
+fm.drop_axis_labels(ax, axis="x", tick_labels=False, ticks=False)
 fm.percent_axis(ax, axis="y", decimals=0, xmax=1.0)
 fm.label_panel(ax, "A")
 ```
 
-Small axes helpers. They return the axes so you can chain them if you are into
-that sort of thing.
+Small axes helpers. `clean_axes()` hides unused spines, removes tick marks,
+sets the grid, and strips the legend frame if one exists. It does not erase
+axis labels, because sometimes a function should do one job instead of becoming
+a junk drawer with a docstring. Use `drop_axis_labels()` when you actually want
+the x label, y label, tick labels, and tick marks gone. Pass
+`tick_labels=False` or `ticks=False` if you want to keep those. All helpers
+return the axes so you can chain them if you are into that sort of thing.
 
 ## Development
 

@@ -9,6 +9,7 @@ from matplotlib.axes import Axes
 from matplotlib.ticker import PercentFormatter
 
 Side = Literal["left", "right", "top", "bottom"]
+Axis = Literal["x", "y", "both"]
 
 
 def clean_axes(
@@ -47,6 +48,38 @@ def percent_axis(
         ax.xaxis.set_major_formatter(formatter)
     else:
         ax.yaxis.set_major_formatter(formatter)
+    return ax
+
+
+def drop_axis_labels(
+    ax: Axes,
+    axis: Axis = "both",
+    *,
+    tick_labels: bool = True,
+    ticks: bool = True,
+) -> Axes:
+    """Remove x and/or y axis labels, tick labels, and tick marks."""
+
+    if axis in {"x", "both"}:
+        ax.set_xlabel("")
+        ax.tick_params(
+            axis="x",
+            which="both",
+            bottom=not ticks,
+            top=not ticks,
+            labelbottom=not tick_labels,
+            labeltop=not tick_labels,
+        )
+    if axis in {"y", "both"}:
+        ax.set_ylabel("")
+        ax.tick_params(
+            axis="y",
+            which="both",
+            left=not ticks,
+            right=not ticks,
+            labelleft=not tick_labels,
+            labelright=not tick_labels,
+        )
     return ax
 
 

@@ -70,3 +70,48 @@ def test_axes_helpers_return_axes():
         assert fm.label_panel(ax, "A") is ax
     finally:
         plt.close(fig)
+
+
+def test_drop_axis_labels_removes_selected_labels():
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0, 1], [0, 1])
+        ax.set(xlabel="x label", ylabel="y label")
+        assert fm.drop_axis_labels(ax, "x") is ax
+        assert ax.get_xlabel() == ""
+        assert ax.get_ylabel() == "y label"
+        assert not any(label.get_visible() for label in ax.get_xticklabels())
+        assert any(label.get_visible() for label in ax.get_yticklabels())
+        assert not any(tick.get_visible() for tick in ax.xaxis.get_ticklines())
+
+        ax.set(xlabel="x label", ylabel="y label")
+        fm.drop_axis_labels(ax, "y")
+        assert ax.get_xlabel() == "x label"
+        assert ax.get_ylabel() == ""
+        assert not any(label.get_visible() for label in ax.get_yticklabels())
+        assert not any(tick.get_visible() for tick in ax.yaxis.get_ticklines())
+
+        ax.set(xlabel="x label", ylabel="y label")
+        fm.drop_axis_labels(ax)
+        assert ax.get_xlabel() == ""
+        assert ax.get_ylabel() == ""
+        assert not any(label.get_visible() for label in ax.get_xticklabels())
+        assert not any(label.get_visible() for label in ax.get_yticklabels())
+    finally:
+        plt.close(fig)
+
+
+def test_drop_axis_labels_can_keep_tick_labels_and_ticks():
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0, 1], [0, 1])
+        ax.set(xlabel="x label", ylabel="y label")
+        fm.drop_axis_labels(ax, tick_labels=False, ticks=False)
+        assert ax.get_xlabel() == ""
+        assert ax.get_ylabel() == ""
+        assert any(label.get_visible() for label in ax.get_xticklabels())
+        assert any(label.get_visible() for label in ax.get_yticklabels())
+        assert any(tick.get_visible() for tick in ax.xaxis.get_ticklines())
+        assert any(tick.get_visible() for tick in ax.yaxis.get_ticklines())
+    finally:
+        plt.close(fig)
