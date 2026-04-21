@@ -100,6 +100,18 @@ def test_export_savefig_accepts_formats_and_overrides(tmp_path):
     assert saved[0].is_file()
 
 
+def test_export_saveclose_writes_and_closes_figure(tmp_path):
+    fig, ax = plt.subplots()
+    number = fig.number
+    ax.plot([0, 1], [0, 1])
+
+    saved = export.saveclose(fig, tmp_path / "plot", formats=("png",))
+
+    assert saved == (tmp_path / "plot.png",)
+    assert saved[0].is_file()
+    assert not plt.fignum_exists(number)
+
+
 def test_layout_size_uses_prl_widths_by_default():
     single = layout.size()
     double = layout.size("double", aspect=0.5)

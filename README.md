@@ -147,6 +147,7 @@ from fubumio import export
 
 export.savefig(fig, "plot")       # plot.png and plot.pdf
 export.savefig(fig, "plot.png")   # also plot.png and plot.pdf
+export.saveclose(fig, "plot")     # same thing, then closes the figure
 ```
 
 ## Layouts

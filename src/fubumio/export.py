@@ -6,6 +6,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
 from . import options as o
@@ -38,4 +39,25 @@ def savefig(
     return tuple(saved)
 
 
-__all__ = ["savefig"]
+def saveclose(
+    fig: Figure,
+    out_file: str | Path,
+    *,
+    formats: Iterable[str] = ("png", "pdf"),
+    parents: bool = True,
+    **overrides: Any,
+) -> tuple[Path, ...]:
+    """Save a figure and close it."""
+
+    saved = savefig(
+        fig,
+        out_file,
+        formats=formats,
+        parents=parents,
+        **overrides,
+    )
+    plt.close(fig)
+    return saved
+
+
+__all__ = ["saveclose", "savefig"]
