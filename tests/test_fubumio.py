@@ -61,6 +61,18 @@ def test_plot_options_expose_overridable_matplotlib_kwargs():
     assert o.markers(c.ina.purple, markersize=3)["markersize"] == 3
     assert o.scatter(c.suisei.blue, s=12)["s"] == 12
     assert o.errorbar(c.mio.base, capsize=4)["capsize"] == 4
+    assert o.fill(c.ina.gold, alpha=0.3) == {
+        "color": c.ina.gold,
+        "alpha": 0.3,
+        "linewidth": 0,
+    }
+    assert o.hist(c.ina.purple, bins=12) == {
+        "color": c.ina.purple,
+        "alpha": 0.9,
+        "edgecolor": c.neutral.ink,
+        "linewidth": 0.6,
+        "bins": 12,
+    }
     assert o.savefig() == {"bbox_inches": "tight", "dpi": 300}
     assert o.savefig(dpi=180, transparent=True) == {
         "bbox_inches": "tight",
@@ -168,6 +180,8 @@ def test_axes_helpers_return_axes():
         ax.plot([0, 1], [0.1, 0.7], **o.markers(c.ina.purple))
         ax.scatter([0.5], [0.4], **o.scatter(c.suisei.blue))
         ax.errorbar([0.7], [0.5], [0.1], **o.errorbar(c.mio.base))
+        ax.fill_between([0, 1], [0.2, 0.3], [0.3, 0.4], **o.fill(c.ina.gold))
+        ax.hist([0.1, 0.2, 0.2, 0.3], **o.hist(c.ina.purple))
         ax.legend()
         assert fm.clean_axes(ax) is ax
         assert fm.percent_axis(ax) is ax

@@ -126,6 +126,8 @@ ax.plot(x, y, **o.line(c.ina.gold))
 ax.plot(x, y, **o.markers(c.ina.purple, markersize=3))
 ax.scatter(x, y, **o.scatter(c.suisei.blue, s=12, alpha=0.8))
 ax.errorbar(x, y, yerr, **o.errorbar(c.mio.base, capsize=4))
+ax.fill_between(x, lo, hi, **o.fill(c.ina.gold, alpha=0.2))
+ax.hist(samples, **o.hist(c.ina.purple, bins=24))
 fig.savefig("plot.png", **o.savefig())
 ```
 

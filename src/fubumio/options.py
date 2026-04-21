@@ -91,6 +91,33 @@ def errorbar(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, An
     )
 
 
+def fill(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for filled regions."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "alpha": 0.25,
+            "linewidth": 0,
+        },
+        overrides,
+    )
+
+
+def hist(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for histograms."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "alpha": 0.9,
+            "edgecolor": c.neutral.ink,
+            "linewidth": 0.6,
+        },
+        overrides,
+    )
+
+
 def savefig(**overrides: Any) -> dict[str, Any]:
     """Return common keyword options for saving figures."""
 
@@ -106,6 +133,8 @@ def savefig(**overrides: Any) -> dict[str, Any]:
 __all__ = [
     "ColorLike",
     "errorbar",
+    "fill",
+    "hist",
     "line",
     "markerline",
     "markers",
