@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Literal
 
+from cycler import cycler
 from matplotlib.axes import Axes
 from matplotlib.ticker import PercentFormatter
 
@@ -48,6 +49,13 @@ def percent_axis(
         ax.xaxis.set_major_formatter(formatter)
     else:
         ax.yaxis.set_major_formatter(formatter)
+    return ax
+
+
+def use_palette(ax: Axes, palette: Iterable[str]) -> Axes:
+    """Apply a color palette as an axes property cycle."""
+
+    ax.set_prop_cycle(cycler(color=tuple(palette)))
     return ax
 
 

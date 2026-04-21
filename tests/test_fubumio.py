@@ -164,6 +164,18 @@ def test_axes_helpers_return_axes():
         plt.close(fig)
 
 
+def test_use_palette_sets_axes_color_cycle():
+    fig, ax = plt.subplots()
+    try:
+        assert fm.use_palette(ax, p.ina_contrast) is ax
+        (line_a,) = ax.plot([0, 1], [0, 1])
+        (line_b,) = ax.plot([0, 1], [1, 0])
+        assert line_a.get_color() == p.ina_contrast[0]
+        assert line_b.get_color() == p.ina_contrast[1]
+    finally:
+        plt.close(fig)
+
+
 def test_drop_axis_labels_removes_selected_labels():
     fig, ax = plt.subplots()
     try:

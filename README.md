@@ -199,6 +199,7 @@ fm.clean_axes(ax)
 fm.drop_axis_labels(ax)
 fm.drop_axis_labels(ax, axis="x", tick_labels=False, ticks=False)
 fm.percent_axis(ax, axis="y", decimals=0, xmax=1.0)
+fm.use_palette(ax, p.ina_contrast)
 fm.label_panel(ax, "A")
 ```
 
@@ -209,6 +210,8 @@ a junk drawer with a docstring. Use `drop_axis_labels()` when you actually want
 the x label, y label, tick labels, and tick marks gone. Pass
 `tick_labels=False` or `ticks=False` if you want to keep those. All helpers
 return the axes so you can chain them if you are into that sort of thing.
+`use_palette()` applies a color cycle to one axes when a global style would be
+overkill, which is very mature of you.
 
 ## Development
 
