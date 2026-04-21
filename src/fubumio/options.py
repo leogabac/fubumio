@@ -46,6 +46,20 @@ def markers(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any
     )
 
 
+def markerline(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
+    """Return common keyword options for marker-only line plots."""
+
+    return _with_overrides(
+        {
+            "color": color,
+            "linewidth": 2.0,
+            "marker": "o",
+            "markersize": 3.0,
+        },
+        overrides,
+    )
+
+
 def scatter(color: ColorLike = c.fubuki.base, **overrides: Any) -> dict[str, Any]:
     """Return common keyword options for scatter plots."""
 

@@ -7,6 +7,7 @@ from matplotlib.colors import is_color_like
 
 import fubumio as fm
 from fubumio import colors as c
+from fubumio import layouts as layout
 from fubumio import options as o
 from fubumio import palettes as p
 
@@ -59,6 +60,38 @@ def test_plot_options_expose_overridable_matplotlib_kwargs():
     assert o.markers(c.ina.purple, markersize=3)["markersize"] == 3
     assert o.scatter(c.suisei.blue, s=12)["s"] == 12
     assert o.errorbar(c.mio.base, capsize=4)["capsize"] == 4
+
+
+def test_layout_size_uses_prl_widths_by_default():
+    single = layout.size()
+    double = layout.size("double", aspect=0.5)
+
+    assert layout.PRL_SINGLE_PT == 243.0
+    assert layout.PRL_DOUBLE_PT == 486.0
+    assert layout.PRL_SINGLE_IN == 243.0 / 72.27
+    assert layout.PRL_DOUBLE_IN == 486.0 / 72.27
+    assert single == (layout.PRL_SINGLE_IN, layout.PRL_SINGLE_IN * 0.62)
+    assert double == (layout.PRL_DOUBLE_IN, layout.PRL_DOUBLE_IN * 0.5)
+    assert layout.size(300.0, aspect=1.0) == (300.0 / 72.27, 300.0 / 72.27)
+    assert layout.size(3.3, unit="in", aspect=1.0) == (3.3, 3.3)
+
+
+def test_layout_subplots_sets_size_without_hiding_matplotlib_kwargs():
+    fig, ax = layout.subplots(width="single", aspect=1.0)
+    try:
+        width, height = fig.get_size_inches()
+        assert width == 243.0 / 72.27
+        assert height == 243.0 / 72.27
+        assert ax is not None
+    finally:
+        plt.close(fig)
+
+    fig, ax = layout.subplots(figsize=(2.0, 1.0))
+    try:
+        assert tuple(fig.get_size_inches()) == (2.0, 1.0)
+        assert ax is not None
+    finally:
+        plt.close(fig)
 
 
 def test_rc_context_applies_and_restores_style():

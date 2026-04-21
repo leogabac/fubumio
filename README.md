@@ -17,6 +17,7 @@ support blue.
 - `colors` for named color tokens.
 - `palettes` for ordered color recipes and matplotlib property cycles.
 - `options` for common matplotlib keyword presets.
+- `layouts` for PRL-sized figures without manually converting points to inches.
 - `apply_style()` when you want global plotting defaults.
 - `rc_context()` when you want the style temporarily, like a responsible adult.
 - `clean_axes()`, `percent_axis()`, and `label_panel()` for the boring cleanup
@@ -43,10 +44,11 @@ pip install -e ".[dev]"
 import matplotlib.pyplot as plt
 import fubumio as fm
 from fubumio import colors as c
+from fubumio import layouts as layout
 from fubumio import options as o
 
 with fm.rc_context():
-    fig, ax = plt.subplots()
+    fig, ax = layout.subplots(width="single")
     ax.plot(
         [1, 2, 3],
         [0.2, 0.6, 0.9],
@@ -128,6 +130,31 @@ ax.errorbar(x, y, yerr, **o.errorbar(c.mio.base, capsize=4))
 These are just dictionaries of Matplotlib kwargs with delusions of usefulness.
 Every preset accepts overrides, so the escape hatch is the same as regular
 Matplotlib: pass the keyword you actually want and move on with your life.
+
+## Layouts
+
+```python
+from fubumio import layouts as layout
+
+layout.PRL_SINGLE_IN     # 243 pt converted to inches
+layout.PRL_DOUBLE_IN     # 486 pt converted to inches
+
+fig, ax = layout.subplots()
+fig, ax = layout.subplots(width="single")
+fig, axs = layout.subplots(1, 2, width="double", aspect=0.45)
+
+fig, ax = plt.subplots(figsize=(layout.PRL_SINGLE_IN, 2.2))
+fig, ax = layout.subplots(width=300, unit="pt", aspect=0.62)
+fig, ax = layout.subplots(figsize=(3.3, 3.0))  # explicit matplotlib still wins
+```
+
+PRL is the default because it is a reasonable first guess and saves everyone
+from repeatedly remembering that a single column is `243 pt` and a double column
+is `486 pt`. The inch constants are there for direct `figsize` use, because
+Matplotlib insists on using freedom units. `layout.subplots()` only computes 
+`figsize` and then gets out of Matplotlib's way. 
+
+Bring your own bad decisions through normal `plt.subplots` kwargs.
 
 ## API
 
