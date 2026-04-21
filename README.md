@@ -196,6 +196,7 @@ Applies the style only inside the block, with optional rcParam overrides.
 
 ```python
 fm.clean_axes(ax)
+fm.clean_legend(ax, ncols=2)
 fm.drop_axis_labels(ax)
 fm.drop_axis_labels(ax, axis="x", tick_labels=False, ticks=False)
 fm.percent_axis(ax, axis="y", decimals=0, xmax=1.0)
@@ -212,6 +213,9 @@ the x label, y label, tick labels, and tick marks gone. Pass
 return the axes so you can chain them if you are into that sort of thing.
 `use_palette()` applies a color cycle to one axes when a global style would be
 overkill, which is very mature of you.
+`clean_legend()` recreates a compact legend from labeled artists and skips the
+whole affair when there is nothing labeled, which is more restraint than most
+notebooks deserve.
 
 ## Development
 

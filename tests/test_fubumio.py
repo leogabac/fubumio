@@ -176,6 +176,31 @@ def test_use_palette_sets_axes_color_cycle():
         plt.close(fig)
 
 
+def test_clean_legend_updates_existing_axes_legend():
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0, 1], [0, 1], label="a")
+        ax.plot([0, 1], [1, 0], label="b")
+        assert fm.clean_legend(ax, ncols=2, loc="upper center") is ax
+        legend = ax.get_legend()
+        assert legend is not None
+        assert legend.get_frame_on() is False
+        assert len(legend.legend_handles) == 2
+        assert legend._ncols == 2
+    finally:
+        plt.close(fig)
+
+
+def test_clean_legend_noops_without_labeled_artists():
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0, 1], [0, 1])
+        assert fm.clean_legend(ax) is ax
+        assert ax.get_legend() is None
+    finally:
+        plt.close(fig)
+
+
 def test_drop_axis_labels_removes_selected_labels():
     fig, ax = plt.subplots()
     try:

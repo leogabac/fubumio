@@ -1,7 +1,14 @@
 """Small matplotlib utilities with fubumio color defaults."""
 
 from . import color, colors, export, layouts, options, palettes
-from .axes import clean_axes, drop_axis_labels, label_panel, percent_axis, use_palette
+from .axes import (
+    clean_axes,
+    clean_legend,
+    drop_axis_labels,
+    label_panel,
+    percent_axis,
+    use_palette,
+)
 from .palette import (
     Color,
     Palette,
@@ -16,6 +23,7 @@ __all__ = [
     "STYLE",
     "apply_style",
     "clean_axes",
+    "clean_legend",
     "color",
     "colors",
     "cycle",

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Literal
+from typing import Any, Literal
 
 from cycler import cycler
 from matplotlib.axes import Axes
@@ -32,6 +32,37 @@ def clean_axes(
         current = ax.get_legend()
         if current is not None:
             current.set_frame_on(False)
+    return ax
+
+
+def clean_legend(
+    ax: Axes,
+    *,
+    frame: bool = False,
+    handlelength: float = 1.4,
+    labelspacing: float = 0.3,
+    columnspacing: float = 1.0,
+    ncols: int | None = None,
+    **kwargs: Any,
+) -> Axes:
+    """Create or update a compact legend for an axes."""
+
+    handles, labels = ax.get_legend_handles_labels()
+    if not handles:
+        return ax
+
+    opts: dict[str, Any] = {
+        "frameon": frame,
+        "handlelength": handlelength,
+        "labelspacing": labelspacing,
+        "columnspacing": columnspacing,
+    }
+    if ncols is not None:
+        opts["ncols"] = ncols
+    opts.update(kwargs)
+
+    legend = ax.legend(handles, labels, **opts)
+    legend.set_frame_on(frame)
     return ax
 
 
